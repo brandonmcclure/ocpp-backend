@@ -8,3 +8,8 @@ tasks:
       sudo apt-get update &&
       sudo apt-get install -y powershell
     init: make
+ports:
+  - name: dashboard
+    description: 'at /dashboard endpoint.\n the websocket at /client, and simulator to: :8383/ocppws/:serial'
+    port: 8080
+    onOpen: open-browser

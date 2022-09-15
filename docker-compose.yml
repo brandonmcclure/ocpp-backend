@@ -1,0 +1,27 @@
+# Use postgres/postgres user/password credentials
+version: "3.1"
+
+services:
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - elixir
+  adminer:
+    image: adminer:4
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - elixir
+  app:
+    image: bmcclure89/elixir_occpbackend:latest
+    ports:
+      - 8383:8383
+    networks:
+      - elixir
+networks:
+  elixir:
+    external: true

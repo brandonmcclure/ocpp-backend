@@ -14,4 +14,4 @@ COPY entrypoint.sh /root/entrypoint.sh
 CMD ["/bin/sh", "/root/entrypoint.sh"]
 # CMD ["mix", "run","--no-halt"]
 
-EXPOSE 4000
+EXPOSE 8383
