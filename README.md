@@ -4,6 +4,10 @@ OCPP Backend
 
 Start of an OCPP 1.6/2.0 compatible backend in Elixir using Cowboy
 
+My personal fork to experiment to set this up as a proof of concept. I am building on windows, and also exploring developing in Gitpod in a web based, docker first environment. 
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/brandonmcclure/ocpp-backend/blob/main/readme.md)
+
 ~~This is primarly meant for an knowledge sharing session within my company~~
 
 ~~This is used now to test certain features in our main software~~
