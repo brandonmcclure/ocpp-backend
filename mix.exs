@@ -8,7 +8,13 @@ defmodule OcppBackend.Mixfile do
       elixir: ">= 1.5.3",
       elixirc_paths: ["lib", "lib/model"],
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      releases: [
+        ocpp_backend: [
+          include_executables_for: [:unix],
+          applications: [runtime_tools: :permanent]
+        ]
+      ]
     ]
   end
 
@@ -16,7 +22,7 @@ defmodule OcppBackend.Mixfile do
     [
       mod: { OcppBackend, [] },
       applications: [:cowboy, :ranch, :timex, :postgrex, :ecto],
-      included_applications:  [:exjsx, :uuid, :earmark, :parse_trans]
+      included_applications:  [:exjsx, :uuid, :earmark]
     ]
   end
 
