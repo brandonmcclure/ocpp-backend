@@ -4,8 +4,8 @@ defmodule OcppBackend.Mixfile do
   def project do
     [
       app: :ocpp_backend,
-      version: "0.0.3",
-      elixir: ">= 1.5.3",
+      version: "0.0.4",
+      elixir: ">= 1.14.0",
       elixirc_paths: ["lib", "lib/model"],
       deps: deps(),
       aliases: aliases()
@@ -22,17 +22,17 @@ defmodule OcppBackend.Mixfile do
 
   defp deps do
     [ 
-      { :cowboy,      "~> 2.4.0"},
+      { :cowboy,      "~> 2.9.0"},
       { :exjsx,       "~> 4.0.0" },
       { :uuid,        "~> 1.1" },
       { :timex,       "~> 3.0" },
-      { :distillery,  "~> 1.5.2" },
-      { :postgrex,    "0.13.3" },
-      { :ecto,        "~> 2.2.8" },
-      { :earmark,     "~> 1.2.4" }, 
-      { :credo,       "~> 0.9.1", only: [:dev, :test], runtime: false},
-      { :mock,        "~> 0.3.0", only: :test},
-      { :mix_docker, "~> 0.5.0"}
+      { :distillery,  "~> 2.1.1" },
+      { :ecto,        "~> 3.8" },
+      {:ecto_sql, "~> 3.0-rc.1"},
+      { :postgrex,    "~> 0.16.4" },
+      { :earmark,     "~> 1.4.27" }, 
+      { :credo,       "~> 1.6.7", only: [:dev, :test], runtime: false},
+      { :mock,        "~> 0.3.0", only: :test}
     ]
   end
 

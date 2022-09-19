@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :ocpp_backend,
   ecto_repos: [OcppBackendRepo]
