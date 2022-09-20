@@ -1,0 +1,242 @@
+<div class="card mt-lg-3">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-lg-2">
+        <h3><%= charger.serial %></h3>
+      </div>
+      <div class="col-lg-1">
+        <%= charger.protocol %>
+      </div>
+      <div class="col-lg-1">
+        <%= if online do %>
+          <span class="badge badge-success badge-pill">Online</span>
+        <% else %>
+          <span class="badge badge-danger badge-pill">Offline</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-8">
+        <table class="table table-sm table-striped">
+          <thead class="thead-light">
+            <th>Connector</th>
+            <th>Evse</th>
+            <th>CurrentType</th>
+            <th>Max Power</th>
+            <th>Status</th>
+          </thead>
+          <%= Enum.map(evse_connectors, fn es -> %>
+            <tr>
+              <td><%= es.connector_id %></td>
+              <td><%= es.evse_id %></td>
+              <td><%= es.current_type %></td>
+              <td><%= es.power_kwh %> kWh</td>
+              <td>
+                  <%= case es.status do %>
+                  <%  nil -> %><span class="badge badge-secondary">Unknown</span></td>
+                  <%  "Unknown" -> %><span class="badge badge-secondary">Unknown</span></td>
+                  <%  "Available" -> %><span class="badge badge-primary">Available</span></td>
+                  <%  "Faulted" -> %><span class="badge badge-danger">Faulted</span></td>
+                  <%  _ -> %><span class="badge badge-success"><%= es.status %></span></td>
+                  <% end %>
+            </tr>
+          <% end) %>
+        </table>
+      </div>       
+    </div>
+  </div>
+</div>
+<div class="card mt-lg-3">
+  <div class="card-header">
+    Remote Control
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-2">
+        <button type="button" class="btn btn-info" id="resetHard">Reset (Hard)</button>
+      </div>
+      <div class="col-lg-2">
+        <button type="button" class="btn btn-info" id="resetSoft">Reset (Soft)</button>
+      </div>
+      <div class="col-lg-2">
+        <button type="button" class="btn btn-info" id="clearCache">Clear Cache</button>
+      </div>
+      <div class="col-lg-2">
+        <div class="dropdown">
+          <button class="btn btn-info dropdown-toggle" type="button" id="triggerMessage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Triggermessage
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item dropdown-item-triggermessage" href="#">BootNotification</a></li>
+            <li><a class="dropdown-item dropdown-item-triggermessage" href="#">DiagnosticsStatusNotification</a></li>
+            <li><a class="dropdown-item dropdown-item-triggermessage" href="#">FirmwareStatusNotification</a></li>
+            <li><a class="dropdown-item dropdown-item-triggermessage" href="#">Heartbeat</a></li>
+            <li><a class="dropdown-item dropdown-item-triggermessage" href="#">MeterValues</a></li>
+            <li><a class="dropdown-item dropdown-item-triggermessage" href="#">StatusNotification</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <div class="dropdown">
+          <button class="btn btn-info dropdown-toggle" type="button" id="unlockConnector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Unlock Connector
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <%= Enum.map(evse_connectors, fn es -> %>
+              <li>
+                <a class="dropdown-item dropdown-item-unlock" data="<%= es.connector_id %>" href="#">
+                  Evse <%= es.evse_id %> Connector <%= es.connector_id%> <%= es.current_type %> <%= es.power_kwh %>kWh
+                </a>
+              </li>
+            <% end) %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card mt-lg-3">
+      <div class="card-header">
+        Remote Start/Stop
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-2"><label for="idToken">IdTag</label></div>
+          <div class="col-lg-3"><input id="idToken" class="form-control" type="text" placeholder="idToken" /></div>
+          <div class="col-lg-3"><label for="connector">connectorId</label></div>
+          <div class="col-lg-2">
+            <select id="connector" class="form-control">
+              <%= Enum.map(evse_connectors, fn es -> %>
+                <option value="<%= es.connector_id%>"><%= es.connector_id%></option>              
+              <% end) %>              
+            </select>
+          </div>
+          <div class="col-lg-2"><button type="button" class="btn btn-info" id="start">Start</button></div>
+        </div>
+        <div class="row">&nbsp;</div>  
+        <div class="row">
+          <div class="col-lg-4"></div>
+          <div class="col-lg-2"><label for="transactionId">transactionId</label></div>
+          <div class="col-lg-4"><input id="transactionId" class="form-control" type="text" placeholder="transactionId" /></div>
+          <div class="col-lg-2"><button type="button" class="btn btn-info" id="stop">Stop</button></div>    
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card mt-lg-3">
+      <div class="card-header">
+        DataTransfer
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-3"><label for="DTvendorId">VendorId</label></div>
+          <div class="col-lg-6"><input id="DTvendorId" class="form-control" type="text" placeholder="vendorId" /></div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3"><label for="DTmessageType">MessageType</label></div>
+          <div class="col-lg-6"><input id="DTmessageType" class="form-control" type="text" placeholder="messageType" /></div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3"><label for="DTdata">Data</label></div>
+          <div class="col-lg-6"><input id="DTdata" class="form-control" type="text" placeholder="data" /></div>
+          <div class="col-lg-2"><button type="button" class="btn btn-info" id="dataTransfer">DataTransfer</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card mt-lg-3">
+  <div class="card-header">
+    Sessions
+  </div>
+  <div class="card-body">
+	 <%= PageUtils.renderFragment("sessions_table.html", [sessions: sessions]) %>
+  </div>
+</div>
+
+<div class="card mt-lg-3">
+  <div class="card-header">
+    Debug
+  </div>
+  <div class="cardbody" id="infopane" class="card-body">
+  </div>
+</div>
+
+<script language="javascript">
+  function postCommand(serial, commandData) {
+    updateInfoPane("sending Command.. " + commandData);
+    $.ajax({
+      url: '/api/chargers/'+serial+'/command',
+      type: 'post',
+      data: commandData,
+      headers: {'Content-Type': 'application/json'},
+      dataType: 'json',
+      statusCode: {
+        404: function() {updateInfoPane("Chargepoint is offline");},
+        406: function() {updateInfoPane("Command not allowed");},
+        201: function() {updateInfoPane("Command accepted");}
+      }
+    });
+  }
+
+  var infoQueue = []
+  function updateInfoPane(text) {
+    infoQueue.push(text);
+    if (infoQueue.length>5) infoQueue.shift();
+    $("#infopane").html(infoQueue.join("<br>"))
+  }
+
+  $("#resetHard").click(function(){
+    postCommand('<%= charger.serial %>', 
+      '{"command": "Reset","data":{"resetType":"Hard"}}');
+  });
+
+  $("#resetSoft").click(function(){
+    postCommand('<%= charger.serial %>', 
+      '{"command": "Reset","data":{"resetType":"Soft"}}');
+  });
+
+  $("#clearCache").click(function(){
+    postCommand('<%= charger.serial %>', 
+      '{"command": "ClearCache","data":{}}');
+  });
+
+  $(".dropdown-item-triggermessage").click(function(event){
+    var messageType = event.target.text
+    postCommand('<%= charger.serial %>', 
+      '{"command": "TriggerMessage","data":{"requestedMessage":"'+messageType+'"}}');
+  });
+
+  $(".dropdown-item-unlock").click(function(event){
+    var connector = event.target.attributes.data.value;
+    postCommand('<%= charger.serial %>', 
+      '{"command": "UnlockConnector","data":{"connectorId":'+connector+'}}');
+  });
+
+  $("#start").click(function(){
+    var idToken = $("#idToken").val();
+    var connector = $("#connector").val();
+    postCommand('<%= charger.serial %>', 
+      '{"command": "RemoteStartTransaction","data":{"idTag":"'+idToken+'", "connectorId":"'+connector+'"}}');
+  });
+
+  $("#dataTransfer").click(function(){
+    var vendorId = $("#DTvendorId").val();
+    var messageType = $("#DTmessageType").val();
+    var data = $("#DTdata").val();
+    postCommand('<%= charger.serial %>', 
+      '{"command": "DataTransfer","data":{"vendorId":"'+vendorId+'", "messageType":"'+messageType+'", "data":"'+data+'"}}');
+  });
+
+  $("#stop").click(function(){
+    var transactionId = $("#transactionId").val();
+    postCommand('<%= charger.serial %>', 
+      '{"command": "RemoteStopTransaction","data":{"transactionId":"'+transactionId+'"}}');
+  });
+
+</script>

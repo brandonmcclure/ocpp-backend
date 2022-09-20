@@ -1,7 +1,7 @@
 ARG TARGET_ELIXER_TAG
 ARG TARGET_ELIXIR_ENV=prod
 FROM $TARGET_ELIXER_TAG as builder
-ARG TARGET_ELIXER_TAG
+
 ENV MIX_ENV $TARGET_ELIXIR_ENV
 
 RUN mkdir -p /src && \
@@ -17,14 +17,14 @@ RUN mix local.hex --force && \
 
 RUN mix release ocpp_backend
 COPY entrypoint.sh /root/entrypoint.sh
-ENTRYPOINT [ "/bin/sh","/root/entrypoint.sh" ]
-# FROM scratch as export
-# COPY --from=builder /src/ /
-# ARG TARGET_ELIXER_TAG
 
-# FROM $TARGET_ELIXER_TAG as app
-# ARG TARGET_ELIXER_TAG
-# WORKDIR /app
-# COPY --from=export / /app
-# ENTRYPOINT [ "mix","run","--no-halt" ]
+FROM scratch as export
+COPY --from=builder /src/ .
+ARG TARGET_ELIXER_TAG
+
+FROM $TARGET_ELIXER_TAG as app
+ARG TARGET_ELIXER_TAG
+WORKDIR /app
+COPY --from=export / /app
+ENTRYPOINT [ "mix","run","--no-halt" ]
 EXPOSE 8383

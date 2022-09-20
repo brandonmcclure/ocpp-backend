@@ -53,7 +53,7 @@ clean:
 DOCKER_MIX_RUN:= docker run -d --rm elixir$(TARGET_ELIXER_TAG)
 DOCKER_BUILD_ARGS:= --build-arg TARGET_ELIXER_TAG=$(TARGET_ELIXER_TAG)
 docker_build: getcommitid getbranchname
-	# docker buildx build --target export -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) --output ocpp-backend $(DOCKER_BUILD_ARGS) .
+	docker buildx build --target export -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) --output ocpp-backend $(DOCKER_BUILD_ARGS) .
 	docker buildx build -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME)$(TAG) -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME):$(BRANCH_NAME) -t $(REGISTRY_NAME)$(REPOSITORY_NAME)$(IMAGE_NAME):$(BRANCH_NAME)_$(COMMITID) $(DOCKER_BUILD_ARGS) . 
 
 build_multiarch:

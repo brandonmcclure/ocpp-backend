@@ -1,0 +1,15 @@
+tasks:
+  - name: make
+    before: >
+      sudo apt-get update &&
+      sudo apt-get install -y wget apt-transport-https software-properties-common &&
+      sudo wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb" &&
+      sudo dpkg -i packages-microsoft-prod.deb &&
+      sudo apt-get update &&
+      sudo apt-get install -y powershell
+    init: make
+ports:
+  - name: dashboard
+    description: 'at /dashboard endpoint.\n the websocket at /client, and simulator to: :8383/ocppws/:serial'
+    port: 8080
+    onOpen: open-browser
