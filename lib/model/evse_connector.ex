@@ -11,7 +11,7 @@ defmodule Model.EvseConnector do
     field :evse_id,      :integer
     field :connector_id, :integer
     field :current_type, :string
-    field :power_kwh,    :integer
+    field :power_kwh,    :string
     field :status,       :string, virtual: true
 
     timestamps()

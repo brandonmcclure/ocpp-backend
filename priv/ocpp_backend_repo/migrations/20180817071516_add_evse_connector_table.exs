@@ -7,7 +7,7 @@ defmodule OcppBackendRepo.Migrations.AddEvseConnectorTable do
       add :evse_id, 		:integer, 	null: false
       add :connector_id, 	:integer, 	null: false
       add :current_type, 	:string, 	null: false
-      add :power_kwh, 		:integer, 	null: false
+      add :power_kwh, 		:string, 	null: false
 
       timestamps()
 	  end
