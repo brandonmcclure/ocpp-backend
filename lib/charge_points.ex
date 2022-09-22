@@ -56,8 +56,8 @@ defmodule Chargepoints do
       nil ->
         charger = %Charger{serial: serial,
                            protocol: protocol,
-                           connected: Timex.now,
-                           last_seen: Timex.now}
+                           connected: NaiveDateTime.truncate(NaiveDateTime.utc_now, :second),
+                           last_seen: NaiveDateTime.truncate(NaiveDateTime.utc_now, :second)}
         {:ok, _} = OcppBackendRepo.insert(
           %EvseConnector{serial: serial, evse_id: 1, connector_id: 1, current_type: "AC", power_kwh: "22"})
         {:ok, inserted} = OcppBackendRepo.insert(charger)
@@ -111,7 +111,7 @@ defmodule Chargepoints do
   end
 
   def handle_call({:message_seen, serial}, _from, _state) do
-    {:ok, updated} = update(serial, %{last_seen: Timex.now})
+    {:ok, updated} = update(serial, %{last_seen: NaiveDateTime.truncate(NaiveDateTime.utc_now, :second)})
     {:reply, :ok, updated}
   end
 

@@ -4,7 +4,7 @@ defmodule OcppBackend.Repo.Migrations.CreateChargerTable do
   def change do
   	create table(:charger) do
       add :serial, 		:string,	null: false
-      add :status, 		:string, 	null: false, deault: "Unknown"
+      add :status, 		:string, 	null: false, default: "Unknown"
       add :connected, :naive_datetime
       add :last_seen, :naive_datetime
 

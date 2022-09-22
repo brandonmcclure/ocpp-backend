@@ -14,16 +14,15 @@ defmodule Utils do
 
   @spec datetime_as_string() :: String.t()
   def datetime_as_string do
-    {:ok, result} = Timex.now
+    {:ok, result} = NaiveDateTime.truncate(NaiveDateTime.utc_now, :second)
                     |> Timex.format("{ISO:Extended}")
     result
   end
 
   @spec datetime_as_string(integer) :: String.t()
   def datetime_as_string(shift_minutes) do
-    {:ok, result} = Timex.now
-                    |> Timex.shift(minutes: shift_minutes)
-                    |> Timex.format("{ISO:Extended}")
+    {:ok, result} = NaiveDateTime.truncate(NaiveDateTime.utc_now, :second)
+
   	result
   end
 
